@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-// import { Skeleton } from '@/components/ui/skeleton';
+
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -20,7 +20,7 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      // Simulate a delay to see the skeleton component
+      
       await new Promise(resolve => setTimeout(resolve, 0.0000001));
 
       const response = await axios.post('http://localhost:4000/api/users/login', formData);

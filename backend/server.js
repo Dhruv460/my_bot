@@ -20,7 +20,7 @@ const io = new Server(server, {
 app.use(express.json());
 app.use(cors());
 
-// Connect to MongoDB
+
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
   .catch((err) => console.log(err));
@@ -28,17 +28,16 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 
 
 
-// API routes
 app.use('/api', (req, res, next) => {
   req.io = io;
   next();
 }, apiRouter);
 
-// Socket.io connection handling
+
 io.on('connection', (socket) => {
   console.log(`Socket connected: ${socket.id}`);
 
-  // Handle events here
+
   socket.on('disconnect', () => {
     console.log(`Socket disconnected: ${socket.id}`);
   });

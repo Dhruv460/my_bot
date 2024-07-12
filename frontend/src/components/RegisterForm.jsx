@@ -44,7 +44,7 @@ console.log(formDataToSend)
       });
 
       localStorage.setItem('userId', response.data.message);
-      // localStorage.setItem('username', response.data.username);
+   
       window.dispatchEvent(new Event('storage'));
       navigate('/login');
       alert('please login with the registed email')

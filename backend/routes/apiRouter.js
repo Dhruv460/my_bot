@@ -11,7 +11,7 @@ apiRouter.post('/prompt-post',protect, async (req, res) => {
   try {
     const { userId, prompt } = req.body;
 
-    // Fetch the user's chat history
+  
     const chatHistory = await ChatHistory.findOne({ userId });
     const previousChats = chatHistory ? chatHistory.chats.map(chat => ({
       role: "user",
@@ -21,10 +21,9 @@ apiRouter.post('/prompt-post',protect, async (req, res) => {
       text: chat.response,
     }))) : [];
 
-    // Generate AI response with reference to previous chats
+ 
     const response = await run(prompt, previousChats);
 
-    // Save the prompt and response to the user's chat history
     if (chatHistory) {
       chatHistory.chats.push({ prompt, response });
       await chatHistory.save();
