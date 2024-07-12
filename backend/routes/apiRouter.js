@@ -2,12 +2,12 @@ import express from 'express';
 import userRoutes from './userRoutes.js';
 import ChatHistory from '../models/ChatHistory.js';
 import run from '../friend_gemini.js';
-
+import {protect} from '../middleware/AuthMiddleware.js'
 const apiRouter = express.Router();
 
 apiRouter.use('/users', userRoutes);
 
-apiRouter.post('/prompt-post', async (req, res) => {
+apiRouter.post('/prompt-post',protect, async (req, res) => {
   try {
     const { userId, prompt } = req.body;
 
@@ -43,7 +43,7 @@ apiRouter.post('/prompt-post', async (req, res) => {
   }
 });
 
-apiRouter.get('/chat-history/:userId', async (req, res) => {
+apiRouter.get('/chat-history/:userId',protect, async (req, res) => {
   try {
     const { userId } = req.params;
     const chatHistory = await ChatHistory.findOne({ userId });

@@ -11,11 +11,14 @@ const ChatAi = () => {
   const userId = localStorage.getItem('userId');
   const { username } = useContext(AuthContext);
   const { theme } = useContext(ThemeContext);
-
+  const token = localStorage.getItem('token')
   useEffect(() => {
     const fetchChatHistory = async () => {
       try {
-        const res = await axios.get(`http://localhost:4000/api/chat-history/${userId}`);
+        const res = await axios.get(`http://localhost:4000/api/chat-history/${userId}`,{
+          headers: {
+            Authorization: `Bearer ${token}`
+      }});
         setChatHistory(res.data);
       } catch (error) {
         console.error('Error fetching chat history:', error);
@@ -33,7 +36,11 @@ const ChatAi = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post('http://localhost:4000/api/prompt-post', { userId, prompt });
+      const res = await axios.post('http://localhost:4000/api/prompt-post', { userId, prompt },{
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       const newChat = { prompt, response: res.data };
       setChatHistory((prevHistory) => [...prevHistory, newChat]);
       setPrompt('');
