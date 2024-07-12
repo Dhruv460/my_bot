@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "start": "node server.js",
+  "scripts": {
+    "start": "node server.js",
+    "rebuild": "npm rebuild"
+  },
   "type": "module",
   "author": "Dhruv Agrawal",
   "license": "ISC",
