@@ -15,7 +15,7 @@ const ChatAi = () => {
   useEffect(() => {
     const fetchChatHistory = async () => {
       try {
-        const res = await axios.get(`http://localhost:4000/api/chat-history/${userId}`,{
+        const res = await axios.get(`https://a-friendly-bot.onrender.com/api/chat-history/${userId}`,{
           headers: {
             Authorization: `Bearer ${token}`
       }});
@@ -36,7 +36,7 @@ const ChatAi = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post('http://localhost:4000/api/prompt-post', { userId, prompt },{
+      const res = await axios.post('https://a-friendly-bot.onrender.com/api/prompt-post', { userId, prompt },{
         headers: {
           Authorization: `Bearer ${token}`
         }

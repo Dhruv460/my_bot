@@ -31,7 +31,7 @@ const Header = () => {
     <header className="sticky top-0 z-50 bg-gray-800 dark:bg-gray-900 text-white p-4 flex justify-between items-center">
       <div className="flex items-center">
         <img
-          src="../public/friendly_bot.jpg"
+          src="/friendly_bot.jpg"
           alt="Logo"
           className="h-8 w-8 rounded-full mr-4"
         />

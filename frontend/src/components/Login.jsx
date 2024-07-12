@@ -23,7 +23,7 @@ const Login = () => {
       
       await new Promise(resolve => setTimeout(resolve, 0.0000001));
 
-      const response = await axios.post('http://localhost:4000/api/users/login', formData);
+      const response = await axios.post('https://a-friendly-bot.onrender.com/api/users/login', formData);
       console.log(response.data);
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('userId', response.data._id);

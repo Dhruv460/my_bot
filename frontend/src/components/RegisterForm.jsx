@@ -13,7 +13,7 @@ const RegisterForm = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const socket = io('http://localhost:4000'); // Adjust the URL as needed
+    const socket = io('https://a-friendly-bot.onrender.com'); // Adjust the URL as needed
     socket.on('connect', () => {
       setFormData((prevData) => ({ ...prevData, socketId: socket.id }));
     });
@@ -37,7 +37,7 @@ const RegisterForm = () => {
   
 console.log(formDataToSend)
     try {
-      const response = await axios.post('http://localhost:4000/api/users/register', formDataToSend, {
+      const response = await axios.post('https://a-friendly-bot.onrender.com/api/users/register', formDataToSend, {
         headers: {
           'Content-Type': 'application/json'
         }
