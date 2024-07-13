@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
-
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
@@ -20,14 +19,13 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      
       await new Promise(resolve => setTimeout(resolve, 0.0000001));
 
       const response = await axios.post('https://a-friendly-bot.onrender.com/api/users/login', formData);
       console.log(response.data);
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('userId', response.data._id);
-      localStorage.setItem('username',response.data.username)
+      localStorage.setItem('username', response.data.username)
       console.log(`userId: ${response.data._id}`);
 
       window.dispatchEvent(new Event('storage'));
@@ -42,13 +40,13 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full bg-white shadow-md rounded-lg p-6">
         <div>
-          <h2 className="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900 dark:text-gray-100">
+          <h2 className="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900">
             Sign in to your account
           </h2>
-          <p className="mt-2 text-center text-sm leading-5 text-gray-600 dark:text-gray-400">
+          <p className="mt-2 text-center text-sm leading-5 text-gray-600">
             Or{' '}
             <Link
               to="/"
@@ -66,11 +64,11 @@ const Login = () => {
         )}
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           {loading ? (
-           <div>loading....</div>
+            <div>loading....</div>
           ) : (
             <div className="rounded-md shadow-sm">
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                   Email address
                 </label>
                 <input
@@ -81,11 +79,11 @@ const Login = () => {
                   required
                   onChange={handleChange}
                   value={formData.email}
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 placeholder-gray-500 text-gray-900 dark:text-gray-100 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 />
               </div>
               <div className="-mt-px">
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                   Password
                 </label>
                 <input
@@ -96,7 +94,7 @@ const Login = () => {
                   required
                   onChange={handleChange}
                   value={formData.password}
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 placeholder-gray-500 text-gray-900 dark:text-gray-100 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 />
               </div>
             </div>
@@ -107,9 +105,9 @@ const Login = () => {
                 id="remember-me"
                 name="remember-me"
                 type="checkbox"
-                className="h-4 w-4 text-indigo-600 dark:text-indigo-400 focus:ring-indigo-500 border-gray-300 rounded"
+                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
               />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900 dark:text-gray-300">
+              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
                 Remember me
               </label>
             </div>
