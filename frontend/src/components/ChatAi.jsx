@@ -11,14 +11,16 @@ const ChatAi = () => {
   const userId = localStorage.getItem('userId');
   const { username } = useContext(AuthContext);
   const { theme } = useContext(ThemeContext);
-  const token = localStorage.getItem('token')
+  const token = localStorage.getItem('token');
+
   useEffect(() => {
     const fetchChatHistory = async () => {
       try {
-        const res = await axios.get(`https://a-friendly-bot.onrender.com/api/chat-history/${userId}`,{
+        const res = await axios.get(`https://a-friendly-bot.onrender.com/api/chat-history/${userId}`, {
           headers: {
             Authorization: `Bearer ${token}`
-      }});
+          }
+        });
         setChatHistory(res.data);
       } catch (error) {
         console.error('Error fetching chat history:', error);
@@ -26,17 +28,24 @@ const ChatAi = () => {
     };
 
     fetchChatHistory();
-  }, [userId]);
+  }, [userId, token]);
 
   const handlePromptChange = (e) => {
     setPrompt(e.target.value);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post('https://a-friendly-bot.onrender.com/api/prompt-post', { userId, prompt },{
+      const res = await axios.post('https://a-friendly-bot.onrender.com/api/prompt-post', { userId, prompt }, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -93,6 +102,7 @@ const ChatAi = () => {
           <textarea
             value={prompt}
             onChange={handlePromptChange}
+            onKeyDown={handleKeyDown}
             placeholder="Enter your prompt here..."
             className="chat-input"
           />
