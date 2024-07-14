@@ -31,9 +31,9 @@ const Header = () => {
     <header className="sticky top-0 z-50 bg-gray-800 dark:bg-gray-900 text-white p-4 flex justify-between items-center">
       <div className="flex items-center">
         <img
-          src="/friendly_bot.jpg"
+          src="/friendly_chat_bot.jpeg"
           alt="Logo"
-          className="h-8 w-8 rounded-full mr-4"
+          className="h-12 w-12 rounded-full mr-4"
         />
         {token && (
           <label className="switch">
