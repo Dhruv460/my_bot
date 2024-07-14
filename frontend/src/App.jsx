@@ -1,30 +1,39 @@
-
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Header from './components/Header.jsx'
+import Header from './components/Header.jsx';
 import './index.css';
 import { AuthProvider } from './AuthContext';
 import RegisterForm from './components/RegisterForm.jsx';
 import Login from './components/Login.jsx';
 import ChatAi from './components/ChatAi.jsx';
 import ThemeProvider from './ThemeContext.jsx';
-const AppContent = () => {
+import MovingLine from './components/MovingLine.jsx';
 
-const userId = localStorage.getItem('userId')
+const AppContent = () => {
+  const [userId, setUserId] = useState(localStorage.getItem('userId'));
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const storedUserId = localStorage.getItem('userId');
+      setUserId(storedUserId);
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
 
   return (
     <>
-    <Header />
+      <Header />
+      {!userId && <MovingLine />}
       <Routes>
         <Route path="/" element={<RegisterForm />} />
-       
         <Route path="/login" element={<Login />} />
-       
-        <Route path="/chatAi" element={<ChatAi/>} />
+        <Route path="/chatAi" element={<ChatAi />} />
       </Routes>
-
-     
-     
     </>
   );
 };
@@ -39,7 +48,7 @@ const App = () => {
           </div>
         </Router>
       </AuthProvider>
-      </ThemeProvider>
+    </ThemeProvider>
   );
 };
 

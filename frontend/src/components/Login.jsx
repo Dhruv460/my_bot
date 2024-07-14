@@ -28,9 +28,11 @@ const Login = () => {
       localStorage.setItem('username', response.data.username)
       console.log(`userId: ${response.data._id}`);
 
+      // Trigger storage event
       window.dispatchEvent(new Event('storage'));
-
       navigate(`/chatAi`);
+     
+     
     } catch (error) {
       console.error(error);
       setError('Invalid email or password');
@@ -64,7 +66,7 @@ const Login = () => {
         )}
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           {loading ? (
-            <div>loading....</div>
+            <div>Loading....</div>
           ) : (
             <div className="rounded-md shadow-sm">
               <div>
@@ -111,14 +113,6 @@ const Login = () => {
                 Remember me
               </label>
             </div>
-            {/* <div className="text-sm leading-5">
-              <Link
-                to="/forgot-password"
-                className="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150"
-              >
-                Forgot your password?
-              </Link>
-            </div> */}
           </div>
           <div>
             <button

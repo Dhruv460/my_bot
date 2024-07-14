@@ -378,7 +378,22 @@ body {
   .chat-button:hover:not(:disabled) {
     background-color: #0056b3;
   }
-  
+  /* MovingLine.css */
+.moving-line {
+  position: relative; 
+  /* background-color: #007bff;  */
+  color: rgb(12, 50, 241);
+  text-align: center;
+  padding: 10px;
+  font-size: 2rem;
+  animation: moveLine 15s linear infinite;
+}
+
+@keyframes moveLine {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
   
   /* Add more specific styles as needed */
   

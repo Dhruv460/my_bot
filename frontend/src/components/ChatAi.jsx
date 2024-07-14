@@ -78,7 +78,7 @@ const ChatAi = () => {
       </div>
       <div className="chat-main">
         <header className="chat-header">
-          <h1>Chat with AI</h1>
+          <h1>Chat with <b>A Friendly Chat bot </b></h1>
         </header>
         <div className="chat-messages">
           {chatHistory.map((chat, index) => (
