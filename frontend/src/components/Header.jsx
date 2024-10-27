@@ -9,7 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 
 const Header = () => {
   const { userId, username, setUserId } = useContext(AuthContext);
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { theme, toggleTheme, isInitialLoad } = useContext(ThemeContext);
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
