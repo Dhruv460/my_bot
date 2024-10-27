@@ -1,132 +1,299 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { ClipLoader } from "react-spinners";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Typewriter from "typewriter-effect";
 
-const Login = () => {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  });
-  const [loading, setLoading] = useState(false); // New loading state
-  const [error, setError] = useState('');
+const Type = () => {
+  return (
+    <div className="bg-transparent">
+      <div className="text-2xl md:text-3xl lg:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-teal-400 tracking-wide">
+        <Typewriter
+          options={{
+            strings: [
+              "Please sign in to continue...",
+              "Welcome back!",
+              "Secure authentication required",
+              "Please verify your identity",
+            ],
+            autoStart: true,
+            loop: true,
+            deleteSpeed: 50,
+            typeSpeed: 50,
+            delay: 50,
+            cursor: "|",
+            pauseFor: 1500,
+          }}
+        />
+      </div>
+    </div>
+  );
+};
+
+const AuthForm = () => {
   const navigate = useNavigate();
+  const [isSignup, setIsSignup] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [signupData, setSignupData] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+
+  const handleLoginChange = (e) => {
+    setLoginData({ ...loginData, [e.target.name]: e.target.value });
+    setError("");
   };
 
-  const handleSubmit = async (e) => {
+  const handleSignupChange = (e) => {
+    setSignupData({ ...signupData, [e.target.name]: e.target.value });
+    setError("");
+  };
+
+  const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 0.0000001));
+      const response = await axios.post(
+        "https://a-friendly-bot.onrender.com/api/users/login",
+        loginData
+      );
 
-      const response = await axios.post('https://a-friendly-bot.onrender.com/api/users/login', formData);
-      console.log(response.data);
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('userId', response.data._id);
-      localStorage.setItem('username', response.data.username)
-      console.log(`userId: ${response.data._id}`);
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("userId", response.data._id);
+      localStorage.setItem("username", response.data.username);
 
-      // Trigger storage event
-      window.dispatchEvent(new Event('storage'));
-      navigate(`/chatAi`);
-     
-     
+      window.dispatchEvent(new Event("storage"));
+
+      toast.success("Login successful!", {
+        autoClose: 1000,
+      });
+
+      setTimeout(() => {
+        navigate("/chatAi");
+      }, 1000);
     } catch (error) {
       console.error(error);
-      setError('Invalid email or password');
+      setError(error.response?.data?.message || "Invalid email or password");
+      toast.error("Failed to login. Please check your credentials.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        "https://a-friendly-bot.onrender.com/api/users/register",
+        {
+          username: signupData.username,
+          email: signupData.email,
+          password: signupData.password,
+        }
+      );
+
+      localStorage.setItem("userId", response.data._id);
+      localStorage.setItem("username", response.data.username);
+
+      window.dispatchEvent(new Event("storage"));
+      toast.success("signup successful!", {
+        autoClose: 1000,
+      });
+
+      setTimeout(() => {
+        navigate("/chatAi");
+      }, 1000);
+    } catch (error) {
+      console.error(error);
+
+      setError(
+        error.response?.data?.message ||
+          "Error creating account. Please try again."
+      );
+      toast.error("Failed to signup. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full bg-white shadow-md rounded-lg p-6">
-        <div>
-          <h2 className="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900">
-            Sign in to your account
-          </h2>
-          <p className="mt-2 text-center text-sm leading-5 text-gray-600">
-            Or{' '}
-            <Link
-              to="/"
-              className="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150"
-            >
-              sign up for an account
-            </Link>
-          </p>
+    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-r from-[#003366] via-[#004080] to-[#0073e6]">
+      <ToastContainer />
+      <div className="w-full max-w-5xl flex flex-col md:flex-row items-center justify-center gap-8 p-4">
+        <div className="w-full md:w-2/5 mb-8 md:mb-0">
+          <Type />
+          <ToastContainer />
         </div>
-        
-        {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-            <span className="block sm:inline">{error}</span>
-          </div>
-        )}
-        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-          {loading ? (
-            <div>Loading....</div>
-          ) : (
-            <div className="rounded-md shadow-sm">
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                  Email address
-                </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  onChange={handleChange}
-                  value={formData.email}
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                />
-              </div>
-              <div className="-mt-px">
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                  Password
-                </label>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  required
-                  onChange={handleChange}
-                  value={formData.password}
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                />
-              </div>
+
+        <div className="w-full md:w-3/5 bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-2xl">
+          <div className="relative">
+            <div className="text-3xl font-semibold text-center mb-8">
+              {isSignup ? "Create Account" : "Welcome Back"}
             </div>
-          )}
-          <div className="mt-6 flex items-center justify-between">
-            <div className="flex items-center">
-              <input
-                id="remember-me"
-                name="remember-me"
-                type="checkbox"
-                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-              />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                Remember me
+
+            {error && (
+              <div className="mb-4 p-3 text-sm text-red-500 bg-red-100 rounded-lg">
+                {error}
+              </div>
+            )}
+
+            <div className="relative flex h-12 mb-6 border border-gray-300 rounded-2xl overflow-hidden">
+              <label
+                className={`flex-1 text-center leading-[48px] cursor-pointer ${
+                  !isSignup ? "text-white" : "text-black"
+                }`}
+                onClick={() => {
+                  setIsSignup(false);
+                  setError("");
+                }}
+              >
+                Login
               </label>
+              <label
+                className={`flex-1 text-center leading-[48px] cursor-pointer ${
+                  isSignup ? "text-white" : "text-black"
+                }`}
+                onClick={() => {
+                  setIsSignup(true);
+                  setError("");
+                }}
+              >
+                Signup
+              </label>
+              <div
+                className={`absolute top-0 h-full w-1/2 bg-gradient-to-r from-[#003366] via-[#004080] to-[#0073e6] rounded-2xl transition-all duration-300 ease-in-out ${
+                  isSignup ? "left-1/2" : "left-0"
+                }`}
+              />
+            </div>
+
+            {/* Forms */}
+            <div className="overflow-hidden">
+              <div
+                className="transition-all duration-300 ease-in-out"
+                style={{
+                  transform: `translateX(${isSignup ? "-50%" : "0"})`,
+                  width: "200%",
+                  display: "flex",
+                }}
+              >
+                <div className="w-1/2 pr-4">
+                  <form onSubmit={handleLogin}>
+                    <div className="mb-6">
+                      <input
+                        type="email"
+                        name="email"
+                        placeholder="Email"
+                        value={loginData.email}
+                        onChange={handleLoginChange}
+                        className="w-full h-12 px-4 text-lg border border-gray-300 rounded-2xl focus:border-[#1a75ff] outline-none transition-colors"
+                        required
+                      />
+                    </div>
+                    <div className="mb-4">
+                      <input
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                        value={loginData.password}
+                        onChange={handleLoginChange}
+                        className="w-full h-12 px-4 text-lg border border-gray-300 rounded-2xl focus:border-[#1a75ff] outline-none transition-colors"
+                        required
+                      />
+                    </div>
+                    <div className="text-right mb-6">
+                      <a href="#" className="text-[#1a75ff] hover:underline">
+                        Forgot Password?
+                      </a>
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="w-full h-12 relative rounded-2xl overflow-hidden group"
+                    >
+                      <div className="absolute inset-0 w-[300%] bg-gradient-to-r from-[#003366] via-[#004080] to-[#0073e6] transition-all duration-300 ease-in-out group-hover:translate-x-[-33.33%]" />
+                      <span className="relative z-10 text-white text-lg font-medium">
+                        {loading ? (
+                          <ClipLoader color="#fff" size={20} />
+                        ) : (
+                          "Login"
+                        )}
+                      </span>
+                    </button>
+                  </form>
+                </div>
+
+                {/* Signup Form */}
+                <div className="w-1/2 pl-4">
+                  <form onSubmit={handleSignup}>
+                    <div className="mb-6">
+                      <input
+                        type="text"
+                        name="username"
+                        placeholder="Full Name"
+                        value={signupData.username}
+                        onChange={handleSignupChange}
+                        className="w-full h-12 px-4 text-lg border border-gray-300 rounded-2xl focus:border-[#1a75ff] outline-none transition-colors"
+                        required
+                      />
+                    </div>
+                    <div className="mb-6">
+                      <input
+                        type="email"
+                        name="email"
+                        placeholder="Email"
+                        value={signupData.email}
+                        onChange={handleSignupChange}
+                        className="w-full h-12 px-4 text-lg border border-gray-300 rounded-2xl focus:border-[#1a75ff] outline-none transition-colors"
+                        required
+                      />
+                    </div>
+                    <div className="mb-6">
+                      <input
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                        value={signupData.password}
+                        onChange={handleSignupChange}
+                        className="w-full h-12 px-4 text-lg border border-gray-300 rounded-2xl focus:border-[#1a75ff] outline-none transition-colors"
+                        required
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="w-full h-12 relative rounded-2xl overflow-hidden group"
+                    >
+                      <div className="absolute inset-0 w-[300%] bg-gradient-to-r from-[#003366] via-[#004080] to-[#0073e6] transition-all duration-300 ease-in-out group-hover:translate-x-[-33.33%]" />
+                      <span className="relative z-10 text-white text-lg font-medium">
+                        {loading ? (
+                          <ClipLoader color="#fff" size={20} />
+                        ) : (
+                          "Signup"
+                        )}
+                      </span>
+                    </button>
+                  </form>
+                </div>
+              </div>
             </div>
           </div>
-          <div>
-            <button
-              type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              disabled={loading}
-            >
-              {loading ? 'Signing in...' : 'Sign in'}
-            </button>
-          </div>
-        </form>
+        </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };
 
-export default Login;
+export default AuthForm;
