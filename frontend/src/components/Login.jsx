@@ -103,8 +103,17 @@ const AuthForm = () => {
         }
       );
 
-      localStorage.setItem("userId", response.data._id);
-      localStorage.setItem("username", response.data.username);
+      const loginResponse = await axios.post(
+        "https://a-friendly-bot.onrender.com/api/users/login",
+        {
+          email: signupData.email,
+          password: signupData.password,
+        }
+      );
+
+      localStorage.setItem("token", loginResponse.data.token);
+      localStorage.setItem("userId", loginResponse.data._id);
+      localStorage.setItem("username", loginResponse.data.username);
 
       window.dispatchEvent(new Event("storage"));
       toast.success("signup successful!", {
